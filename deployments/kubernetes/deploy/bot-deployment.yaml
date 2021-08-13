@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: discord-bot
+spec:
+  selector:
+    matchLabels:
+      app: discord-bot
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: discord-bot
+    spec:
+      containers:
+      - name: go-discord-bot
+        image: kwhk/go-discord-bot:v0.1-arm32v7
+        imagePullPolicy: Always
+        ports:
+          - name: http
+            containerPort: 8000
+        envFrom:
+          - configMapRef:
+              name: bot-token
