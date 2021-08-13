@@ -1,9 +1,13 @@
 # go-discord-bot
 
-## How to run
+## How to run locally
 
-1. Go to the project root directory
-1. Run:
+The following directory paths assume that you are in the project's root directory.
+1. Install all modules
+    ```go
+    go mod download
+    ```
+1. Run bot:
     ```go
     go run ./cmd/go-discord-bot
     ```
