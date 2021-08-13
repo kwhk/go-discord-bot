@@ -1,9 +1,8 @@
-# FROM arm32v7/golang:alpine
-# ENV GOOS=linux \
-#     GOARCH=arm
 # Alpine is chosen for its small footprint
 # compared to Ubuntu
-FROM golang:alpine
+FROM arm32v7/golang:alpine
+ENV GOOS=linux \
+    GOARCH=arm
 
 WORKDIR /app
 
