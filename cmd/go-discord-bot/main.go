@@ -5,46 +5,60 @@ import (
 	"os"
 	"syscall"
 	"os/signal"
+	"log"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/kwhk/go-discord-bot/config"
 	"github.com/kwhk/go-discord-bot/pkg/commands"
 )
 
-func main() {
-	dg, err := discordgo.New("Bot " + os.Getenv("BOT_TOKEN"))
+const (
+	GLOBAL_COMMAND = ""
+)
+
+func startSession() (*discordgo.Session, error) {
+	s, err := discordgo.New("Bot " + os.Getenv("BOT_TOKEN"))
 	if err != nil {
-		fmt.Println("Error creating discord session: ", err)
-		return
+		log.Fatalf("Invalid bot parameter: %v", err)
+		return nil, err
 	}
+	
+	s.AddHandler(func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		if h, ok := commands.CommandHandlers[i.ApplicationCommandData().Name]; ok {
+			h(s, i)
+		}
+	})
 
-	dg.AddHandler(messageSender)
+	s.AddHandler(func(s *discordgo.Session, r *discordgo.Ready) {
+		fmt.Println("Bot is now running. Press CTRL-C to exit.")
+	})
 
-	dg.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsGuildMessages)
-
-	err = dg.Open()
+	err = s.Open()
 	if err != nil {
 		fmt.Println("Error opening connection, ", err)
+		return nil, err
+	}
+
+	return s, nil
+}
+
+func main() {
+	session, err := startSession()
+	if err != nil {
+		log.Fatal("Error starting Discord session")
 		return
 	}
 
-	fmt.Println("Bot is now running. Press CTRL-C to exit.")
+	for _, v := range commands.Commands {
+		_, err := session.ApplicationCommandCreate(session.State.User.ID, GLOBAL_COMMAND, v)
+		if err != nil {
+			fmt.Printf("Cannot create '%v' command: %v\n", v.Name, err)
+		}
+	}
+
+	defer session.Close()
 
 	// Gracefully close down Discord session.
 	sc := make(chan os.Signal, 1)
-	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 	<-sc
-
-	dg.Close()
-}
-
-func messageSender(s *discordgo.Session, m *discordgo.MessageCreate) {
-	// Bot should not reply to itself.
-	if m.Author.ID == s.State.User.ID {
-		return
-	}
-
-	if m.Content[0] == config.Prefix {
-		go commands.Controller(s, m, m.Content[1:])
-	}
 }
