@@ -13,7 +13,7 @@ The following directory paths assume that you are in the project's root director
     ```
 1. Run bot:
     ```go
-    go run ./cmd/go-discord-bot
+    go run ./cmd/go_discord_bot
     ```
 
 ## Possible features to implement
