@@ -8,7 +8,7 @@ import (
 	"log"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/kwhk/go-discord-bot/pkg/commands"
+	"github.com/kwhk/go-discord-bot/internal/pkg/commands"
 )
 
 const (
