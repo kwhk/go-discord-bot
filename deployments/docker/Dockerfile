@@ -15,6 +15,6 @@ RUN go mod download
 COPY . .
 
 # Compile our Go application
-RUN go build -o ./build/go-discord-bot ./cmd/go-discord-bot
+RUN go build -o ./build/go_discord_bot ./cmd/go_discord_bot
 
-CMD ["./build/go-discord-bot"]
+CMD ["./build/go_discord_bot"]

@@ -4,7 +4,6 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-// Map action (key) with commands
 var Commands = []*discordgo.ApplicationCommand{
 	{
 		Name: "ping",
