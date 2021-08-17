@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	timeStampSeparator = ": "
+	timeStampSeparator = " - "
 )
 
 type VoiceChannels struct {
