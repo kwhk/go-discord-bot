@@ -1,36 +1,39 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"os"
-	"syscall"
-	"os/signal"
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
+	_ "github.com/kwhk/go-discord-bot/config"
+	"github.com/kwhk/go-discord-bot/internal/pkg/callbacks"
 	"github.com/kwhk/go-discord-bot/internal/pkg/commands"
+	"github.com/kwhk/go-discord-bot/internal/pkg/monitor"
 )
 
 const (
-	GLOBAL_COMMAND = ""
+	globalCommand = ""
+	monitorInterval = 5 * time.Minute
 )
 
-func startSession() (*discordgo.Session, error) {
+func startSession(ctx context.Context) (*discordgo.Session, error) {
 	s, err := discordgo.New("Bot " + os.Getenv("BOT_TOKEN"))
 	if err != nil {
 		log.Fatalf("Invalid bot parameter: %v", err)
 		return nil, err
 	}
-	
-	s.AddHandler(func(s *discordgo.Session, i *discordgo.InteractionCreate) {
-		if h, ok := commands.CommandHandlers[i.ApplicationCommandData().Name]; ok {
-			h(s, i)
-		}
+
+	metrics := monitor.NewMetrics(&monitor.Config{
+		Session: s,
+		Interval: monitorInterval,
 	})
 
-	s.AddHandler(func(s *discordgo.Session, r *discordgo.Ready) {
-		fmt.Println("Bot is now running. Press CTRL-C to exit.")
-	})
+	addCallbacks(s)
 
 	err = s.Open()
 	if err != nil {
@@ -38,18 +41,28 @@ func startSession() (*discordgo.Session, error) {
 		return nil, err
 	}
 
+	metrics.Monitor(ctx)
+
 	return s, nil
 }
 
+func addCallbacks(session *discordgo.Session) {
+	session.AddHandler(callbacks.InitCommands)
+	session.AddHandler(callbacks.Ready)
+}
+
 func main() {
-	session, err := startSession()
+	monitorCtx, cancelMonitorCtx := context.WithCancel(context.Background())
+	defer cancelMonitorCtx()
+
+	session, err := startSession(monitorCtx)
 	if err != nil {
 		log.Fatal("Error starting Discord session")
 		return
 	}
 
 	for _, v := range commands.Commands {
-		_, err := session.ApplicationCommandCreate(session.State.User.ID, GLOBAL_COMMAND, v)
+		_, err := session.ApplicationCommandCreate(session.State.User.ID, globalCommand, v)
 		if err != nil {
 			fmt.Printf("Cannot create '%v' command: %v\n", v.Name, err)
 		}
