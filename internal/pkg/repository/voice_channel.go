@@ -1,6 +1,6 @@
 /* Abstract away from the specific implementation of DB operations and instead define
- its expected behaviour. This makes it easier when changing DB (e.g. from Redis to MongoDB)
- in the future. */
+its expected behaviour. This makes it easier when changing DB (e.g. from Redis to MongoDB)
+in the future. */
 package repository
 
 import (

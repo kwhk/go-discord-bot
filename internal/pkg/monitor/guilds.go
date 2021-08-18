@@ -2,8 +2,8 @@
 package monitor
 
 import (
-	"fmt"
 	"context"
+	"fmt"
 	"sync"
 	"time"
 
@@ -11,13 +11,13 @@ import (
 )
 
 type Guilds struct {
-	Session *discordgo.Session
+	Session  *discordgo.Session
 	Interval time.Duration
-	Cache *GuildsCache
+	Cache    *GuildsCache
 }
 
 type GuildsCache struct {
-	Mutex *sync.Mutex
+	Mutex     *sync.Mutex
 	guildList []*discordgo.Guild
 	numGuilds int
 }

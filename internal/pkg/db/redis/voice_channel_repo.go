@@ -1,10 +1,10 @@
 package redis
 
 import (
-	"time"
 	"context"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/kwhk/go-discord-bot/config"
@@ -17,7 +17,7 @@ type RedisVoiceChannelRepo struct {
 
 func NewRedisVoiceChannelRepo(client *redis.Client) *RedisVoiceChannelRepo {
 	return &RedisVoiceChannelRepo{
-		client: config.Redis,		 
+		client: config.Redis,
 	}
 }
 
@@ -40,7 +40,7 @@ func (r RedisVoiceChannelRepo) GetVCOpenSince(ctx context.Context, guildId strin
 			log.Printf("Error: Failed to parse duration %s\n", val)
 			return nil, err
 		}
-		
+
 		openSince[channelID] = time
 	}
 

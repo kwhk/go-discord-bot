@@ -6,5 +6,5 @@ import (
 )
 
 func Ready(s *discordgo.Session, r *discordgo.Ready) {
-	fmt.Println("Bot is now running. Press CTRL-C to exit.")	
+	fmt.Println("Bot is now running. Press CTRL-C to exit.")
 }

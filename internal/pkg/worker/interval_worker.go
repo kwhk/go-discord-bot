@@ -8,14 +8,14 @@ import (
 
 type IntervalWorker struct {
 	Interval time.Duration
-	period time.Duration
-	job Job
+	period   time.Duration
+	job      Job
 }
 
 func NewIntervalWorker(interval time.Duration) *IntervalWorker {
 	return &IntervalWorker{
 		Interval: interval,
-		period: interval,
+		period:   interval,
 	}
 }
 

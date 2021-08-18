@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	globalCommand = ""
+	globalCommand   = ""
 	monitorInterval = 5 * time.Minute
 )
 
@@ -29,7 +29,7 @@ func startSession(ctx context.Context) (*discordgo.Session, error) {
 	}
 
 	metrics := monitor.NewMetrics(&monitor.Config{
-		Session: s,
+		Session:  s,
 		Interval: monitorInterval,
 	})
 

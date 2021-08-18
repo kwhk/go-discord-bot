@@ -6,11 +6,11 @@ import (
 
 var Commands = []*discordgo.ApplicationCommand{
 	{
-		Name: "ping",
+		Name:        "ping",
 		Description: "Ping bot",
 	},
 	{
-		Name: "options",
+		Name:        "options",
 		Description: "Command for demonstrating options",
 		Options: []*discordgo.ApplicationCommandOption{
 			{
@@ -58,7 +58,7 @@ var Commands = []*discordgo.ApplicationCommand{
 	},
 }
 
-var CommandHandlers = map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	"ping": ping,
+var CommandHandlers = map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate){
+	"ping":    ping,
 	"options": options,
 }

@@ -1,23 +1,23 @@
 package monitor
 
 import (
-	"sync"
 	"context"
+	"sync"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/kwhk/go-discord-bot/internal/pkg/db/redis"
 	"github.com/kwhk/go-discord-bot/config"
+	"github.com/kwhk/go-discord-bot/internal/pkg/db/redis"
 )
 
 type Config struct {
-	Session *discordgo.Session
+	Session  *discordgo.Session
 	Interval time.Duration
 }
 
 type Metrics struct {
 	*Config
-	Guilds *Guilds
+	Guilds        *Guilds
 	VoiceChannels *VoiceChannels
 }
 
@@ -39,16 +39,16 @@ func (metrics *Metrics) Monitor(ctx context.Context) {
 
 func (metrics *Metrics) newGuilds() {
 	metrics.Guilds = &Guilds{
-		Session: metrics.Session,
+		Session:  metrics.Session,
 		Interval: metrics.Interval,
-		Cache: &GuildsCache{Mutex: &sync.Mutex{}},
+		Cache:    &GuildsCache{Mutex: &sync.Mutex{}},
 	}
 }
 
 func (metrics *Metrics) newVoiceChannels() {
 	metrics.VoiceChannels = &VoiceChannels{
-		Session: metrics.Session,
+		Session:  metrics.Session,
 		Interval: metrics.Interval,
-		Repo: redis.NewRedisVoiceChannelRepo(config.Redis),
+		Repo:     redis.NewRedisVoiceChannelRepo(config.Redis),
 	}
 }

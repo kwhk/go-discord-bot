@@ -1,10 +1,10 @@
 package monitor
 
 import (
-	"fmt"
 	"context"
-	"time"
+	"fmt"
 	"strings"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/kwhk/go-discord-bot/internal/pkg/repository"
@@ -15,9 +15,9 @@ const (
 )
 
 type VoiceChannels struct {
-	Session *discordgo.Session
+	Session  *discordgo.Session
 	Interval time.Duration
-	Repo repository.VoiceChannelRepo
+	Repo     repository.VoiceChannelRepo
 }
 
 func (vc *VoiceChannels) Monitor(ctx context.Context) {
@@ -34,7 +34,7 @@ func (vc *VoiceChannels) Monitor(ctx context.Context) {
 	}
 }
 
-// update tracks how long 
+// update tracks how long
 func (vc *VoiceChannels) update() {
 	ctx := context.Background()
 
@@ -74,7 +74,7 @@ func (vc *VoiceChannels) update() {
 		}
 
 		for vcId, isActive := range voiceChannels {
-			if (!isActive) {
+			if !isActive {
 				// Set zero time value if voice channel is not active
 				openSince[vcId] = time.Time{}
 			}
@@ -97,7 +97,7 @@ func (vc *VoiceChannels) update() {
 			newName := strings.Split(channel.Name, timeStampSeparator)[0]
 
 			// If timestamp is non-zero (i.e. channel is active) then append timestamp
-			if (!timestamp.IsZero()) {
+			if !timestamp.IsZero() {
 				newName += timeStampSeparator + vc.formatDuration(time.Since(timestamp))
 			} else {
 				// If channel is inactive and timestamp has already been removed don't have to edit channel name again
