@@ -10,6 +10,10 @@ var Commands = []*discordgo.ApplicationCommand{
 		Description: "Ping bot",
 	},
 	{
+		Name:        "notify",
+		Description: "Post all automatic notifications to this channel.",
+	},
+	{
 		Name:        "options",
 		Description: "Command for demonstrating options",
 		Options: []*discordgo.ApplicationCommandOption{
@@ -61,4 +65,5 @@ var Commands = []*discordgo.ApplicationCommand{
 var CommandHandlers = map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate){
 	"ping":    ping,
 	"options": options,
+	"notify":  notify,
 }

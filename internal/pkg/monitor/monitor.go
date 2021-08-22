@@ -47,8 +47,9 @@ func (metrics *Metrics) newGuilds() {
 
 func (metrics *Metrics) newVoiceChannels() {
 	metrics.VoiceChannels = &VoiceChannels{
-		Session:  metrics.Session,
-		Interval: metrics.Interval,
-		Repo:     redis.NewRedisVoiceChannelRepo(config.Redis),
+		Session:           metrics.Session,
+		Interval:          metrics.Interval,
+		VoiceChannelRepo:  redis.NewRedisVoiceChannelRepo(config.Redis),
+		NotificationsRepo: redis.NewNotificationsRepo(config.Redis),
 	}
 }

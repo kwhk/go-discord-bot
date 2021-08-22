@@ -2,6 +2,7 @@ package redis
 
 const (
 	voiceChannelOpenSinceKey = "vcOpenSince"
+	notificationChannelsKey  = "notificationChannels"
 )
 
 // newKey creates new key by concatenating arguments with a colon (":") separator.
